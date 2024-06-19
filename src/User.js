@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import GetAllUsers from './components/getAllUsers';
 import CreateUser from './components/createUser';
 import GetUserById from './components/getUserById';
-import Navbar from './components/navbar';
 
 
 function User() {

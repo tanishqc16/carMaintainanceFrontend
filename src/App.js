@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, BrowserRouter } from 'react-router-dom';
-import GetAllUsers from './components/getAllUsers';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from './User';
 import Car from './Car';
 import Navbar from './components/navbar';
@@ -9,13 +8,13 @@ function App() {
 
   return (
     <>
-    <BrowserRouter>
+    <Router>
       <Navbar/>
         <Routes>
           <Route path="/users" element={<User/>}/>
           <Route path="/cars" element={<Car/>}/>
         </Routes>
-    </BrowserRouter>
+    </Router>
     </>
   )
 }
