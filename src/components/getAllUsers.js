@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 function GetAllUsers() {
-  const [data, setData] = useState({ users: [] });
+  const [data, setData] = useState({ Users: [] });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
@@ -9,12 +9,13 @@ function GetAllUsers() {
   const fetchUsers = () => {
     setLoading(true);
     setError(null);
-    fetch('http://localhost:5000/users/getall')
+    fetch('https://apicars.prisms.in/user/getall')
       .then((res) => res.json())
       .then((data) => {
         setLoading(false);
         if (data.error === 0) {
           setData(data);
+          console.log(data);
         } else {
           setError(data['error-message']);
         }
@@ -43,9 +44,9 @@ function GetAllUsers() {
       {error && <div style={{ color: 'red' }}>{error}</div>}
       {showUsers && (
         <ul>
-          {data.users?.map((user, i) => (
+          {data.Users?.map((user, i) => (
             <li key={i}>
-              {user.name} - {user.phone}
+              {user.name} - {user.phone_no}
             </li>
           ))}
         </ul>
