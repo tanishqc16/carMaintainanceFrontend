@@ -18,7 +18,7 @@ function CreateServicingRecord() {
       status: status,
     };
 
-    fetch('http://localhost:5000/servicing/create', {
+    fetch('https://apicars.prisms.in/servicing/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

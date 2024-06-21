@@ -1,65 +1,10 @@
-// import React, { useState, useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
-
-// function GetUserById() {
-//   const { id } = useParams();
-//   const [user, setUser] = useState(null);
-//   const [error, setError] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     setLoading(true);
-//     fetch(`http://localhost:5000/users/get/${id}`)
-//       .then(async(res) => {
-//         setLoading(false);
-//         if (!res.ok) {
-//           const errorData = await res.json();
-//           throw new Error(errorData['error-message'] || 'Unexpected error');
-//         }
-//         if (res.headers.get('content-type').includes('application/json')) {
-//           return res.json();
-//         } else {
-//           throw new Error('Unexpected content type');
-//         }
-//       })
-//       .then((data) => {
-//         setLoading(false);
-//         if (data.error === 0) {
-//           setUser(data.user);
-//         } else {
-//           setError(data['error-message']);
-//         }
-//       })
-//       .catch((error) => {
-//         setLoading(false);
-//         console.error('Error fetching user:', error);
-//         setError(error.message);
-//       });
-//   }, [id]);
-
-//   return (
-//     <div>
-//       <h3>User Details</h3>
-//       {loading && <div>Loading...</div>}
-//       {error && <div style={{ color: 'red' }}>{error}</div>}
-//       {user && (
-//         <div>
-//           <p><strong>Name:</strong> {user.name}</p>
-//           <p><strong>Phone Number:</strong> {user.phone}</p>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default GetUserById;
-
 import React, { useState } from 'react';
 
 function GetUserById() {
   const [userId, setUserId] = useState('');
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   const handleChange = (event) => {
     setUserId(event.target.value);
@@ -69,42 +14,65 @@ function GetUserById() {
     event.preventDefault();
     setError(null);
 
-    fetch(`http://localhost:5000/users/get/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('Response data:', data); // Log the response data
-
-        if (data.error === 0) {
-          setUser(data.user);
-        } else {
-          setError(data['error-message']);
+    if (showDetails) {
+      setShowDetails(false); // Hide details if they are already shown
+      setUser(null);
+      setUserId('');
+    } else {
+      fetch(`https://apicars.prisms.in/user/get/${userId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error === 0) {
+            setUser(data.User);
+            setShowDetails(true); // Show details when data is successfully fetched
+          } else {
+            setError(data['error-message']);
+            setUser(null);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user:', error);
+          setError('Error fetching user. Please try again.');
           setUser(null);
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching user:', error);
-        setError('Error fetching user. Please try again.');
-        setUser(null);
-      });
+        });
+    }
   };
 
   return (
-    <div style={{textAlign:"left", marginLeft:"50px"}}>
+    <div style={{ textAlign: "left", marginLeft: "50px" }}>
+      <h2>Get User by ID</h2>
       <form onSubmit={handleSubmit}>
-        <label style={{marginRight:"20px", marginLeft:"2px"}}>
-          Search by ID : 
-          <input style={{marginLeft:"5px"}} type="number" value={userId} onChange={handleChange} required />
+        <label>
+          Enter User ID:
+          <input type="number" value={userId} onChange={handleChange} required />
         </label>
-        <button style={{backgroundColor:"lightblue", borderRadius:"10px"}} type="submit">Get User</button>
+        <button type="submit" style={{ backgroundColor: "lightblue", borderRadius: "10px", marginLeft:"25px" }}>
+          {showDetails ? 'Hide User' : 'Get User'}
+        </button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {user && (
+      {user && showDetails && (
         <div>
           <h3>User Details</h3>
+          <p><strong>ID:</strong> {user.id}</p>
           <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Phone Number:</strong> {user.phone}</p>
+          <p><strong>Phone Number:</strong> {user['phone_no']}</p>
+          {user.Cars && user.Cars.length > 0 && (
+            <div>
+              <h4>Cars</h4>
+              <ul>
+                {user.Cars.map((car) => (
+                  <li key={car.Id}>
+                    <p><strong>Car ID:</strong> {car.Id}</p>
+                    <p><strong>Model:</strong> {car.Model}</p>
+                    <p><strong>Color:</strong> {car.Color}</p>
+                    <p><strong>Purchase Date:</strong> {car['Purchase-date']}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-        
       )}
     </div>
   );

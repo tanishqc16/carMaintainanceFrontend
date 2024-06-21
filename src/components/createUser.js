@@ -13,10 +13,10 @@ function CreateUser({onUserCreated}) {
 
     const userData = {
       name: name,
-      phone_number: phoneNumber
+      phone_no: phoneNumber
     };
 
-    fetch('http://localhost:5000/users/create', {
+    fetch('https://apicars.prisms.in/user/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
