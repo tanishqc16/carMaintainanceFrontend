@@ -63,10 +63,10 @@ function GetUserById() {
               <ul>
                 {user.Cars.map((car) => (
                   <li key={car.Id}>
-                    <p><strong>Car ID:</strong> {car.Id}</p>
-                    <p><strong>Model:</strong> {car.Model}</p>
-                    <p><strong>Color:</strong> {car.Color}</p>
-                    <p><strong>Purchase Date:</strong> {car['Purchase-date']}</p>
+                    <p><strong>Car ID:</strong> {car.id}</p>
+                    <p><strong>Model:</strong> {car.model}</p>
+                    <p><strong>Color:</strong> {car.color}</p>
+                    <p><strong>Purchase Date:</strong> {car['purchase_date']}</p>
                   </li>
                 ))}
               </ul>
